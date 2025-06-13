@@ -69,6 +69,10 @@ composer require wzhih/guomi
 + C: https://github.com/guanzhi/GmSSL 北大计算机的开源项目，fork多,star也多。
 + php-openssl:  php7 好像支持了sm3, 在openssl1.1.1以上，可用编译的方式加入sm3,sm4的支持。 xampp套件下的php7以上的版本支持sm3, sm4的openssl_系列函数， openssl_get_md_methods() 查看是否支持sm3, openssl_get_cipher_methods() 查看是否支持sm4
 
+## 关于java互通的一个问题
+* java中的大数处理使用的是一般BigInteger ， 这个在 .toByteArray() 时，如果第一个字符大于7F 经过这个函数后前面会补个"00", 当签名，加解密的时候中间有个sm3的运算，使用的是字符串，这时就会出现问题了
+* 基点的 a值，Gy值, 还有公私钥都有可能出现这种情况，需要特殊处理
+* BigInteger 的 .toString方法倒是不会出现这样的问题，如果出现不能互签的情况，查看java源码 出现在要进行sm3 hash的时候输入时数据多加了00
 
 ## 特别注意
   * sm2的构造函数中缺省是固定了中间椭圆，目前发现个别的接入方（目前发现是招行金融平台）将这个中间椭圆私钥随机算法给加黑了， 请使用的时候 $randFixed 设为false 以及重新生成一个中间椭圆的密钥对替换原有程序的数据
