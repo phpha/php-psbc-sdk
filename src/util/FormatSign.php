@@ -1,5 +1,6 @@
 <?php
-namespace Rtgm\util;
+
+namespace PhpGm\util;
 
 class FormatSign
 {
@@ -14,7 +15,7 @@ class FormatSign
         return base64_encode($result);
     }
     /**
-     * 
+     *
      *
      * @return string
      */
@@ -24,34 +25,37 @@ class FormatSign
      * @param string $sign
      * @return string
      */
-    public function format_cmbc($sign){
+    public function format_cmbc($sign)
+    {
         list($binR, $binS) = $this->_decode_rs(base64_decode($sign));
-        while(strlen($binR)<32){
-            $binR = chr(0).$binR;
+        while (strlen($binR) < 32) {
+            $binR = chr(0) . $binR;
         }
-        while(strlen($binS)<32){
-            $binS = chr(0).$binS;
+        while (strlen($binS) < 32) {
+            $binS = chr(0) . $binS;
         }
         $lenR = strlen($binR);
         $lenS = strlen($binS);
         $result = chr(48) . chr(2 + $lenR + 2 + $lenS) . chr(2) . chr($lenR) . $binR . chr(2) . chr($lenS) . $binS;
         return base64_encode($result);
     }
+
     private function _trim_int_pad($binStr)
     {
         // echo bin2hex($binStr)."\n";
         //trim 0
-        while(ord($binStr[0])==0){
-            $binStr = substr($binStr,1);
+        while (ord($binStr[0]) == 0) {
+            $binStr = substr($binStr, 1);
         }
         // add 0 if necessary
-        if(ord($binStr[0])>127){
-            $binStr =  chr(0).$binStr;
+        if (ord($binStr[0]) > 127) {
+            $binStr = chr(0) . $binStr;
         }
         // echo bin2hex($binStr)."\n";
         return $binStr;
 
     }
+
     private function _decode_rs($binSign)
     {
         $rLen = ord($binSign[3]);

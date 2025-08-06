@@ -1,47 +1,27 @@
 <?php
 //
-namespace Rtgm\smecc\SM2;
+namespace PhpGm\smecc\SM2;
 
-use Rtgm\smecc\SM3\SM3Digest;
-use Rtgm\sm\RtSm2;
+use PhpGm\sm\RtSm2;
+use PhpGm\smecc\SM3\SM3Digest;
 
 class Cipher
 {
     private $ct = 1;
 
-    private  $p2;
+    private $p2;
     /**
      * @var SM3Digest
      */
-    private  $sm3keybase;
+    private $sm3keybase;
     /**
      * @var SM3Digest
      */
-    private  $sm3c3;
+    private $sm3c3;
 
-    private  $key = array();
-    private  $keyOff = 0;
+    private $key = array();
+    private $keyOff = 0;
 
-
-    private function  Reset() //注意，加密使用无符号的数组转换，以便与硬件相一致
-    {
-        $this->sm3keybase = new SM3Digest();
-        $this->sm3c3 = new SM3Digest();
-
-        $p = array();
-
-        $gmp_x = $this->p2->GetX();
-        $x = Hex2ByteBuf::ConvertGmp2ByteArray($gmp_x);
-        $this->sm3keybase->BlockUpdate($x, 0, sizeof($x));
-        $this->sm3c3->BlockUpdate($x, 0, sizeof($x));
-
-        $gmp_y = $this->p2->GetY();
-        $y = Hex2ByteBuf::ConvertGmp2ByteArray($gmp_y);
-        $this->sm3keybase->BlockUpdate($y, 0, sizeof($y));
-
-        $this->ct = 1;
-        $this->NextKey();
-    }
     public function initEncipher($userPoint, $foreignKey = null)
     {
         if (empty($foreignKey)) {
@@ -54,13 +34,32 @@ class Cipher
         $this->reset();
         return substr($foreignPubKey, -128);
     }
-    public function initDecipher($userPoint, $privateKey)
+
+    private function Reset() //注意，加密使用无符号的数组转换，以便与硬件相一致
     {
-        $this->p2 = $userPoint->mul(gmp_init($privateKey, 16));
-        $this->reset();
+        $this->sm3keybase = new SM3Digest();
+        $this->sm3c3 = new SM3Digest();
+
+        $p = array();
+
+        $gmp_x = $this->p2->GetX();
+        $this->sm3keybase->BlockUpdate(array(4), 0, 1);
+        $x = Hex2ByteBuf::ConvertGmp2ByteArray($gmp_x);
+        $this->sm3keybase->BlockUpdate($x, 0, sizeof($x));
+        if ($x[0] > 127) { // >7F
+            $this->sm3c3->BlockUpdate(array(0), 0, 1);
+        }
+        $this->sm3c3->BlockUpdate($x, 0, sizeof($x));
+
+        $gmp_y = $this->p2->GetY();
+        $y = Hex2ByteBuf::ConvertGmp2ByteArray($gmp_y);
+        $this->sm3keybase->BlockUpdate($y, 0, sizeof($y));
+
+        $this->ct = 1;
+        $this->NextKey();
     }
 
-    private function  NextKey()
+    private function NextKey()
     {
         $sm3keycur = new SM3Digest();
         $sm3keycur->setSM3Digest($this->sm3keybase);
@@ -73,9 +72,26 @@ class Cipher
         $this->ct++;
     }
 
-    public function  encryptBlock($data)
+    public function Dofinal()
     {
-        $len  = count($data);
+        $c3 = array();
+        $gmp_p = $this->p2->GetY();
+        $p = Hex2ByteBuf::ConvertGmp2ByteArray($gmp_p);
+        $this->sm3c3->BlockUpdate($p, 0, sizeof($p));
+        $this->sm3c3->DoFinal($c3, 0);
+        $this->Reset();
+        return $c3;
+    }
+
+    public function initDecipher($userPoint, $privateKey)
+    {
+        $this->p2 = $userPoint->mul(gmp_init($privateKey, 16));
+        $this->reset();
+    }
+
+    public function encryptBlock($data)
+    {
+        $len = count($data);
         $this->sm3c3->BlockUpdate($data, 0, $len);
         // print_r($data);die();
         for ($i = 0; $i < $len; $i++) {
@@ -88,11 +104,9 @@ class Cipher
         return $data;
     }
 
-
-
     public function decryptBlock($data)
     {
-        $len  = count($data);
+        $len = count($data);
         for ($i = 0; $i < $len; $i++) {
             if ($this->keyOff == sizeof($this->key))
                 $this->NextKey();
@@ -101,16 +115,5 @@ class Cipher
         }
         $this->sm3c3->BlockUpdate($data, 0, $len);
         return $data;
-    }
-
-    public function  Dofinal()
-    {
-        $c3 = array();
-        $gmp_p = $this->p2->GetY();
-        $p = Hex2ByteBuf::ConvertGmp2ByteArray($gmp_p);
-        $this->sm3c3->BlockUpdate($p, 0, sizeof($p));
-        $this->sm3c3->DoFinal($c3, 0);
-        $this->Reset(); 
-        return $c3;
     }
 }

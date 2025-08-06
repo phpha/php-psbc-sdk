@@ -1,6 +1,6 @@
 <?php
 
-namespace Rtgm\util;
+namespace PhpGm\util;
 
 use FG\ASN1\ASNObject;
 use FG\ASN1\Identifier;
@@ -8,43 +8,43 @@ use FG\ASN1\Identifier;
 
 class MyAsn1
 {
-    const CLASS_UNIVERSAL        = 0;
-    const CLASS_APPLICATION      = 1;
+    const CLASS_UNIVERSAL = 0;
+    const CLASS_APPLICATION = 1;
     const CLASS_CONTEXT_SPECIFIC = 2;
-    const CLASS_PRIVATE          = 3;
-    const TYPE_BOOLEAN           = 1;
-    const TYPE_INTEGER           = 2;
-    const TYPE_BIT_STRING        = 3;
-    const TYPE_OCTET_STRING      = 4;
-    const TYPE_NULL              = 5;
+    const CLASS_PRIVATE = 3;
+    const TYPE_BOOLEAN = 1;
+    const TYPE_INTEGER = 2;
+    const TYPE_BIT_STRING = 3;
+    const TYPE_OCTET_STRING = 4;
+    const TYPE_NULL = 5;
     const TYPE_OBJECT_IDENTIFIER = 6;
     const TYPE_OBJECT_DESCRIPTOR = 7;
-    const TYPE_INSTANCE_OF       = 8; // EXTERNAL
-    const TYPE_REAL              = 9;
-    const TYPE_ENUMERATED        = 10;
-    const TYPE_EMBEDDED          = 11;
-    const TYPE_UTF8_STRING       = 12;
-    const TYPE_RELATIVE_OID      = 13;
-    const TYPE_SEQUENCE          = 16; // SEQUENCE OF
-    const TYPE_SET               = 17; // SET OF
-    const TYPE_NUMERIC_STRING    = 18;
-    const TYPE_PRINTABLE_STRING  = 19;
-    const TYPE_TELETEX_STRING    = 20; // T61String
-    const TYPE_VIDEOTEX_STRING   = 21;
-    const TYPE_IA5_STRING        = 22;
-    const TYPE_UTC_TIME          = 23;
-    const TYPE_GENERALIZED_TIME  = 24;
-    const TYPE_GRAPHIC_STRING    = 25;
-    const TYPE_VISIBLE_STRING    = 26; // ISO646String
-    const TYPE_GENERAL_STRING    = 27;
-    const TYPE_UNIVERSAL_STRING  = 28;
-    const TYPE_CHARACTER_STRING  = 29;
-    const TYPE_BMP_STRING        = 30;
-    const TYPE_CHOICE            = -1;
-    const TYPE_ANY               = -2;
-    const TYPE_ANY_RAW           = -3;
-    const TYPE_ANY_SKIP          = -4;
-    const TYPE_ANY_DER           = -5;
+    const TYPE_INSTANCE_OF = 8; // EXTERNAL
+    const TYPE_REAL = 9;
+    const TYPE_ENUMERATED = 10;
+    const TYPE_EMBEDDED = 11;
+    const TYPE_UTF8_STRING = 12;
+    const TYPE_RELATIVE_OID = 13;
+    const TYPE_SEQUENCE = 16; // SEQUENCE OF
+    const TYPE_SET = 17; // SET OF
+    const TYPE_NUMERIC_STRING = 18;
+    const TYPE_PRINTABLE_STRING = 19;
+    const TYPE_TELETEX_STRING = 20; // T61String
+    const TYPE_VIDEOTEX_STRING = 21;
+    const TYPE_IA5_STRING = 22;
+    const TYPE_UTC_TIME = 23;
+    const TYPE_GENERALIZED_TIME = 24;
+    const TYPE_GRAPHIC_STRING = 25;
+    const TYPE_VISIBLE_STRING = 26; // ISO646String
+    const TYPE_GENERAL_STRING = 27;
+    const TYPE_UNIVERSAL_STRING = 28;
+    const TYPE_CHARACTER_STRING = 29;
+    const TYPE_BMP_STRING = 30;
+    const TYPE_CHOICE = -1;
+    const TYPE_ANY = -2;
+    const TYPE_ANY_RAW = -3;
+    const TYPE_ANY_SKIP = -4;
+    const TYPE_ANY_DER = -5;
 
     public static function decode_file($pemfile)
     {
@@ -63,6 +63,7 @@ class MyAsn1
         $asnObject = ASNObject::fromBinary($data);
         return self::printObject($asnObject);
     }
+
     public static function printObject(ASNObject $object, $depth = 0)
     {
         $content = $object->getContent();
@@ -75,15 +76,15 @@ class MyAsn1
             return $result;
         } else {
             $type = $object->getType();
-            
+
             // $strval = $object->__toString(); 
             // 如果是 oid的话，tostring时是取的oidText, PHPasn1没有sm2等相关的就会去调用 http://oid-info.com/get/{$oidString}的接口，然后超时0.5秒
             // 这里相当于直接取get_contents(), 也是可以的
-            $strval = $content; 
+            $strval = $content;
             if ($type == 6) { //oid
-                $rt =  self::OIDtoText($strval);
+                $rt = self::OIDtoText($strval);
             } else if ($type == 2) {
-                $rt =   self::format_bigint($strval);
+                $rt = self::format_bigint($strval);
             }
             // else if($type==4){
             //     if(substr($strval,0,2)=='30') { //可以再分解
@@ -128,12 +129,13 @@ class MyAsn1
     protected static function pem2der($pem_data)
     {
         $begin = "-----";
-        $end   = "-----END";
+        $end = "-----END";
         $pem_data = substr($pem_data, strpos($pem_data, $begin, 6) + strlen($begin));
         $pem_data = substr($pem_data, 0, strpos($pem_data, $end));
         $der = base64_decode($pem_data);
         return $der;
     }
+
     /**
      * 大数都转成16进制
      *
@@ -145,10 +147,11 @@ class MyAsn1
         $hex = gmp_strval(gmp_init($data, 10), 16);
         return self::padding_one_zero($hex);
     }
+
     public static function padding_one_zero($hex)
     {
         if (strlen($hex) % 2 == 1) {
-            $hex =  '0' . $hex;
+            $hex = '0' . $hex;
         }
         return $hex;
     }
@@ -161,6 +164,7 @@ class MyAsn1
         }
         return $hex;
     }
+
     /**
      * from  https://github.com/vakata/asn1
      *
@@ -169,63 +173,63 @@ class MyAsn1
     public static $oids = array(
         'sm2' => '1.2.156.10197.1.301',
         'sm3WithSM2Encryption' => '1.2.156.10197.1.501',
-        'sha1' =>                 '1.3.14.3.2.26',
-        'sha256' =>               '2.16.840.1.101.3.4.2.1',
-        'sha384' =>               '2.16.840.1.101.3.4.2.2',
-        'sha512' =>               '2.16.840.1.101.3.4.2.3',
-        'sha224' =>               '2.16.840.1.101.3.4.2.4',
-        'md5' =>                  '1.2.840.113549.2.5',
-        'md2' =>                  '1.3.14.7.2.2.1',
-        'ripemd160' =>            '1.3.36.3.2.1',
-        'MD4withRSA' =>           '1.2.840.113549.1.1.3',
-        'SHA1withECDSA' =>        '1.2.840.10045.4.1',
-        'SHA224withECDSA' =>      '1.2.840.10045.4.3.1',
-        'SHA256withECDSA' =>      '1.2.840.10045.4.3.2',
-        'SHA384withECDSA' =>      '1.2.840.10045.4.3.3',
-        'SHA512withECDSA' =>      '1.2.840.10045.4.3.4',
-        'dsa' =>                  '1.2.840.10040.4.1',
-        'SHA1withDSA' =>          '1.2.840.10040.4.3',
-        'SHA224withDSA' =>        '2.16.840.1.101.3.4.3.1',
-        'SHA256withDSA' =>        '2.16.840.1.101.3.4.3.2',
-        'rsaEncryption' =>        '1.2.840.113549.1.1.1',
-        'countryName' =>          '2.5.4.6',
-        'organization' =>         '2.5.4.10',
-        'organizationalUnit' =>   '2.5.4.11',
-        'stateOrProvinceName' =>  '2.5.4.8',
-        'locality' =>             '2.5.4.7',
-        'commonName' =>           '2.5.4.3',
+        'sha1' => '1.3.14.3.2.26',
+        'sha256' => '2.16.840.1.101.3.4.2.1',
+        'sha384' => '2.16.840.1.101.3.4.2.2',
+        'sha512' => '2.16.840.1.101.3.4.2.3',
+        'sha224' => '2.16.840.1.101.3.4.2.4',
+        'md5' => '1.2.840.113549.2.5',
+        'md2' => '1.3.14.7.2.2.1',
+        'ripemd160' => '1.3.36.3.2.1',
+        'MD4withRSA' => '1.2.840.113549.1.1.3',
+        'SHA1withECDSA' => '1.2.840.10045.4.1',
+        'SHA224withECDSA' => '1.2.840.10045.4.3.1',
+        'SHA256withECDSA' => '1.2.840.10045.4.3.2',
+        'SHA384withECDSA' => '1.2.840.10045.4.3.3',
+        'SHA512withECDSA' => '1.2.840.10045.4.3.4',
+        'dsa' => '1.2.840.10040.4.1',
+        'SHA1withDSA' => '1.2.840.10040.4.3',
+        'SHA224withDSA' => '2.16.840.1.101.3.4.3.1',
+        'SHA256withDSA' => '2.16.840.1.101.3.4.3.2',
+        'rsaEncryption' => '1.2.840.113549.1.1.1',
+        'countryName' => '2.5.4.6',
+        'organization' => '2.5.4.10',
+        'organizationalUnit' => '2.5.4.11',
+        'stateOrProvinceName' => '2.5.4.8',
+        'locality' => '2.5.4.7',
+        'commonName' => '2.5.4.3',
         'subjectKeyIdentifier' => '2.5.29.14',
-        'keyUsage' =>             '2.5.29.15',
-        'subjectAltName' =>       '2.5.29.17',
-        'basicConstraints' =>     '2.5.29.19',
-        'nameConstraints' =>      '2.5.29.30',
+        'keyUsage' => '2.5.29.15',
+        'subjectAltName' => '2.5.29.17',
+        'basicConstraints' => '2.5.29.19',
+        'nameConstraints' => '2.5.29.30',
         'cRLDistributionPoints' => '2.5.29.31',
-        'certificatePolicies' =>  '2.5.29.32',
+        'certificatePolicies' => '2.5.29.32',
         'authorityKeyIdentifier' => '2.5.29.35',
-        'policyConstraints' =>    '2.5.29.36',
-        'extKeyUsage' =>          '2.5.29.37',
-        'authorityInfoAccess' =>  '1.3.6.1.5.5.7.1.1',
-        'anyExtendedKeyUsage' =>  '2.5.29.37.0',
-        'serverAuth' =>           '1.3.6.1.5.5.7.3.1',
-        'clientAuth' =>           '1.3.6.1.5.5.7.3.2',
-        'codeSigning' =>          '1.3.6.1.5.5.7.3.3',
-        'emailProtection' =>      '1.3.6.1.5.5.7.3.4',
-        'timeStamping' =>         '1.3.6.1.5.5.7.3.8',
-        'ocspSigning' =>          '1.3.6.1.5.5.7.3.9',
-        'ecPublicKey' =>          '1.2.840.10045.2.1',
-        'secp256r1' =>            '1.2.840.10045.3.1.7',
-        'secp256k1' =>            '1.3.132.0.10',
-        'secp384r1' =>            '1.3.132.0.34',
-        'pkcs5PBES2' =>           '1.2.840.113549.1.5.13',
-        'pkcs5PBKDF2' =>          '1.2.840.113549.1.5.12',
-        'des-EDE3-CBC' =>         '1.2.840.113549.3.7',
-        'data' =>                 '1.2.840.113549.1.7.1', // CMS data
-        'signed-data' =>          '1.2.840.113549.1.7.2', // CMS signed-data
-        'enveloped-data' =>       '1.2.840.113549.1.7.3', // CMS enveloped-data
-        'digested-data' =>        '1.2.840.113549.1.7.5', // CMS digested-data
-        'encrypted-data' =>       '1.2.840.113549.1.7.6', // CMS encrypted-data
-        'authenticated-data' =>   '1.2.840.113549.1.9.16.1.2', // CMS authenticated-data
-        'tstinfo' =>              '1.2.840.113549.1.9.16.1.4', // RFC3161 TSTInfo,
+        'policyConstraints' => '2.5.29.36',
+        'extKeyUsage' => '2.5.29.37',
+        'authorityInfoAccess' => '1.3.6.1.5.5.7.1.1',
+        'anyExtendedKeyUsage' => '2.5.29.37.0',
+        'serverAuth' => '1.3.6.1.5.5.7.3.1',
+        'clientAuth' => '1.3.6.1.5.5.7.3.2',
+        'codeSigning' => '1.3.6.1.5.5.7.3.3',
+        'emailProtection' => '1.3.6.1.5.5.7.3.4',
+        'timeStamping' => '1.3.6.1.5.5.7.3.8',
+        'ocspSigning' => '1.3.6.1.5.5.7.3.9',
+        'ecPublicKey' => '1.2.840.10045.2.1',
+        'secp256r1' => '1.2.840.10045.3.1.7',
+        'secp256k1' => '1.3.132.0.10',
+        'secp384r1' => '1.3.132.0.34',
+        'pkcs5PBES2' => '1.2.840.113549.1.5.13',
+        'pkcs5PBKDF2' => '1.2.840.113549.1.5.12',
+        'des-EDE3-CBC' => '1.2.840.113549.3.7',
+        'data' => '1.2.840.113549.1.7.1', // CMS data
+        'signed-data' => '1.2.840.113549.1.7.2', // CMS signed-data
+        'enveloped-data' => '1.2.840.113549.1.7.3', // CMS enveloped-data
+        'digested-data' => '1.2.840.113549.1.7.5', // CMS digested-data
+        'encrypted-data' => '1.2.840.113549.1.7.6', // CMS encrypted-data
+        'authenticated-data' => '1.2.840.113549.1.9.16.1.2', // CMS authenticated-data
+        'tstinfo' => '1.2.840.113549.1.9.16.1.4', // RFC3161 TSTInfo,
         'pkix' => '1.3.6.1.5.5.7',
         'pe' => '1.3.6.1.5.5.7.1',
         'qt' => '1.3.6.1.5.5.7.2',
@@ -611,6 +615,7 @@ class MyAsn1
         '2.5.4.97' => 'organizationIdentifier',
 
     );
+
     /**
      * from  https://github.com/vakata/asn1
      *
@@ -624,6 +629,7 @@ class MyAsn1
 
         return $text;
     }
+
     /**
      * from  https://github.com/vakata/asn1
      *

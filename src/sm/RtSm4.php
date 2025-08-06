@@ -1,13 +1,13 @@
 <?php
 
-namespace Rtgm\sm;
+namespace PhpGm\sm;
 
 /**
  * Sm4 from  https://github.com/lizhichao/sm
  */
 
 use Exception;
-use Rtgm\smecc\SM4\Sm4;
+use PhpGm\smecc\SM4\Sm4;
 
 class RtSm4
 {
@@ -72,11 +72,11 @@ class RtSm4
             case 'sm4':
             case 'sm4-cbc':
                 $ret = $this->sm4->deDataCbc($data, $iv);
-                $ret =  $this->mystr_unpad($ret);
+                $ret = $this->mystr_unpad($ret);
                 break;
             case 'sm4-ecb':
                 $ret = $this->sm4->deDataEcb($data);
-                $ret =  $this->mystr_unpad($ret);
+                $ret = $this->mystr_unpad($ret);
                 break;
             case 'sm4-ctr':
                 $ret = $this->sm4->deDataCtr($data, $iv);
@@ -92,19 +92,22 @@ class RtSm4
         }
         return $ret;
     }
+
     //加密前补齐
     protected function mystr_pad($data, $len = 16)
     {
         $n = $len - strlen($data) % $len;
         return $data . str_repeat(chr($n), $n);
     }
+
     // 解密后去掉补齐
     protected function mystr_unpad($data)
     {
         $n = ord(substr($data, -1));
         return substr($data, 0, -$n);
     }
-    protected  function check_iv($iv)
+
+    protected function check_iv($iv)
     {
         if (strlen($iv) != $this->ivLen) {
             throw new Exception('bad iv');

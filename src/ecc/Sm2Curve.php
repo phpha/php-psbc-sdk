@@ -1,5 +1,6 @@
 <?php
-namespace Rtgm\ecc;
+
+namespace PhpGm\ecc;
 
 use Mdanter\Ecc\Curves\NamedCurveFp;
 use Mdanter\Ecc\Math\GmpMathInterface;
@@ -26,6 +27,7 @@ class Sm2Curve
         $this->adapter = $adapter;
         // echo "I am sm ecc\n";
     }
+
     /**
      * Returns an sm2国密 curve.
      *
@@ -44,7 +46,7 @@ class Sm2Curve
     /**
      * Returns an sm2 generator.
      *
-     * @param  RandomNumberGeneratorInterface $randomGenerator
+     * @param RandomNumberGeneratorInterface $randomGenerator
      * @return GeneratorPoint
      */
     public function generatorSm2(RandomNumberGeneratorInterface $randomGenerator = null): GeneratorPoint

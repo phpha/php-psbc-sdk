@@ -7,14 +7,15 @@ declare(strict_types=1);
 namespace Mdanter\Ecc\Serializer\Util;
 
 use FG\ASN1\Universal\ObjectIdentifier;
-use Mdanter\Ecc\Curves\NamedCurveFp;
 use Mdanter\Ecc\Curves\CurveFactory;
+use Mdanter\Ecc\Curves\NamedCurveFp;
 use Mdanter\Ecc\Curves\NistCurve;
 use Mdanter\Ecc\Curves\SecgCurve;
-use Rtgm\ecc\Sm2Curve;
 use Mdanter\Ecc\Exception\UnsupportedCurveException;
 use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
+use PhpGm\ecc\Sm2Curve;
+
 class CurveOidMapper
 {
 
@@ -37,7 +38,7 @@ class CurveOidMapper
     const SECP_256R1_OID = '1.2.840.10045.3.1.7';
 
     const SECP_384R1_OID = '1.3.132.0.34';
-    
+
     const SM2_OID = '1.2.156.10197.1.301';
 
     /**
@@ -71,7 +72,7 @@ class CurveOidMapper
         SecgCurve::NAME_SECP_256K1 => 32,
         SecgCurve::NAME_SECP_256R1 => 32,
         SecgCurve::NAME_SECP_384R1 => 48,
-        Sm2Curve::NAME_PSM2 =>32, //sm2 也是256位的，32个字节的密码
+        Sm2Curve::NAME_PSM2 => 32, //sm2 也是256位的，32个字节的密码
     );
 
     /**

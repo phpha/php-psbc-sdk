@@ -1,8 +1,10 @@
 <?php
 /**
- *  source: https://github.com/lizhichao/sm 
+ *  source: https://github.com/lizhichao/sm
  */
-namespace Rtgm\smecc\SM4;
+
+namespace PhpGm\smecc\SM4;
+
 class Sm4
 {
     private $ck = [
@@ -58,7 +60,7 @@ class Sm4
 
     private function dd(&$data)
     {
-        $n    = strlen($data) % $this->len;
+        $n = strlen($data) % $this->len;
         $data = $data . str_repeat($this->b, $n);
     }
 
@@ -73,10 +75,10 @@ class Sm4
     {
         $arr = unpack('N*', $v);
         $max = 0xffffffff;
-        $j   = 1;
+        $j = 1;
         for ($i = 4; $i > 0; $i--) {
             if ($arr[$i] > $max - $j) {
-                $j       = 1;
+                $j = 1;
                 $arr[$i] = 0;
             } else {
                 $arr[$i] += $j;
@@ -110,13 +112,13 @@ class Sm4
         $this->dd($str);
         $l = strlen($str) / $this->len;
         for ($i = 0; $i < $l; $i++) {
-            $s  = substr($str, $i * $this->len, $this->len);
+            $s = substr($str, $i * $this->len, $this->len);
             $tr = [];
             $this->encode(array_values(unpack('N*', $iv)), $tr);
             $s1 = pack('N*', ...$tr);
             $s1 = $s1 ^ $s;
             $iv = $this->add($iv);
-            $r  .= $s1;
+            $r .= $s1;
         }
         return $r;
     }
@@ -135,12 +137,12 @@ class Sm4
         $this->dd($str);
         $l = strlen($str) / $this->len;
         for ($i = 0; $i < $l; $i++) {
-            $s  = substr($str, $i * $this->len, $this->len);
+            $s = substr($str, $i * $this->len, $this->len);
             $tr = [];
             $this->encode(array_values(unpack('N*', $iv)), $tr);
             $iv = pack('N*', ...$tr);
             $s1 = $s ^ $iv;
-            $r  .= $s1;
+            $r .= $s1;
         }
         return $r;
     }
@@ -169,13 +171,13 @@ class Sm4
         $this->dd($str);
         $l = strlen($str) / $this->len;
         for ($i = 0; $i < $l; $i++) {
-            $s  = substr($str, $i * $this->len, $this->len);
+            $s = substr($str, $i * $this->len, $this->len);
             $tr = [];
             $this->encode(array_values(unpack('N*', $iv)), $tr);
             $s1 = pack('N*', ...$tr);
             $s1 = $s ^ $s1;
             $iv = $s;
-            $r  .= $s1;
+            $r .= $s1;
         }
         return $r;
     }
@@ -193,12 +195,12 @@ class Sm4
         $this->dd($str);
         $l = strlen($str) / $this->len;
         for ($i = 0; $i < $l; $i++) {
-            $s  = substr($str, $i * $this->len, $this->len);
+            $s = substr($str, $i * $this->len, $this->len);
             $tr = [];
             $this->encode(array_values(unpack('N*', $iv)), $tr);
             $s1 = pack('N*', ...$tr);
             $iv = $s ^ $s1;
-            $r  .= $iv;
+            $r .= $iv;
         }
         return $r;
     }
@@ -217,12 +219,12 @@ class Sm4
         $this->dd($str);
         $l = strlen($str) / $this->len;
         for ($i = 0; $i < $l; $i++) {
-            $s  = substr($str, $i * $this->len, $this->len);
-            $s  = $iv ^ $s;
+            $s = substr($str, $i * $this->len, $this->len);
+            $s = $iv ^ $s;
             $tr = [];
             $this->encode(array_values(unpack('N*', $s)), $tr);
             $iv = pack('N*', ...$tr);
-            $r  .= $iv;
+            $r .= $iv;
         }
         return $r;
     }
@@ -240,13 +242,13 @@ class Sm4
         $this->dd($str);
         $l = strlen($str) / $this->len;
         for ($i = 0; $i < $l; $i++) {
-            $s  = substr($str, $i * $this->len, $this->len);
+            $s = substr($str, $i * $this->len, $this->len);
             $tr = [];
             $this->decode(array_values(unpack('N*', $s)), $tr);
             $s1 = pack('N*', ...$tr);
             $s1 = $iv ^ $s1;
             $iv = $s;
-            $r  .= $s1;
+            $r .= $s1;
         }
         return $r;
     }

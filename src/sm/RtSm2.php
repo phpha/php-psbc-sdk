@@ -1,23 +1,22 @@
 <?php
 
-namespace Rtgm\sm;
+namespace PhpGm\sm;
 
 define("C1C3C2", 1);
 define("C1C2C3", 0);
 
-use Rtgm\ecc\RtEccFactory;
-use Rtgm\ecc\Sm2Signer;
 use Mdanter\Ecc\Crypto\Key\PrivateKey;
 use Mdanter\Ecc\Crypto\Key\PublicKey;
 use Mdanter\Ecc\Primitives\Point;
-use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
 use Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;
-use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
+use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
+use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
-
-use Rtgm\smecc\SM2\Sm2WithSm3;
-use Rtgm\smecc\SM2\Hex2ByteBuf;
+use PhpGm\ecc\RtEccFactory;
+use PhpGm\ecc\Sm2Signer;
+use PhpGm\smecc\SM2\Hex2ByteBuf;
+use PhpGm\smecc\SM2\Sm2WithSm3;
 
 class RtSm2
 {
@@ -40,10 +39,11 @@ class RtSm2
         '04e27c3780e7069bda7082a23a489d77587ce309583ed99253f66e1d9833ed1a1d0b5ce86dc6714e9974cf258589139d7b1855e8c9fa2f2c1175ee123a95a23e9b'
     ];
     protected $cipher = null;
+
     /**
      * Undocumented function
      *
-     * @param string $formatSign 
+     * @param string $formatSign
      * @param boolean $randFixed 是否使用中间椭圆，使用中间椭圆的话，速度会快一些，但同样的数据的签名或加密的值就固定了
      */
     function __construct($formatSign = 'hex', $randFixed = true)
@@ -70,7 +70,7 @@ class RtSm2
         // $adapter = $this->adapter;
         $generator = $this->generator;
         //随机生成一个私钥类
-        $private  = $generator->createPrivateKey();
+        $private = $generator->createPrivateKey();
         //取出私钥16进制表示出来
         $privateKey = $this->decHex($private->getSecret());
         //取出公钥的椭圆点
@@ -90,7 +90,7 @@ class RtSm2
     {
         $adapter = $this->adapter;
         $generator = $this->generator;
-        $private  = $generator->createPrivateKey();
+        $private = $generator->createPrivateKey();
         $derSerializer = new DerPrivateKeySerializer($adapter);
         // der包 ans1编码 1 版本号 2私钥 3 oid  4 公钥  四组数据
         // $der = $derSerializer->serialize( $private );
@@ -104,6 +104,7 @@ class RtSm2
 
         return [$privateKeyPem, $publicKeyPem];
     }
+
     /**
      * SM2 公钥加密算法
      *
@@ -115,7 +116,7 @@ class RtSm2
     {
         $adapter = $this->adapter;
         $generator = $this->generator;
-        $this->cipher = new \Rtgm\smecc\SM2\Cipher();
+        $this->cipher = new \PhpGm\smecc\SM2\Cipher();
         $arrMsg = Hex2ByteBuf::HexStringToByteArray2(bin2hex($document));
 
         list($pubKeyX, $pubKeyY) = $this->_getKeyXY($publicKey);
@@ -141,11 +142,12 @@ class RtSm2
             return $c1 . $c2 . $c3;
         }
     }
+
     /**
-     * SM2 私钥解密算法, 
+     * SM2 私钥解密算法,
      *
      * @param string $document
-     * @param string $privateKey  如提供的base64的，可使用 bin2hex(base64_decode($privateKey))
+     * @param string $privateKey 如提供的base64的，可使用 bin2hex(base64_decode($privateKey))
      * @param bool $trim 是否做04开头的去除，看业务返回
      * @return string
      */
@@ -160,7 +162,7 @@ class RtSm2
         }
         $adapter = $this->adapter;
         $generator = $this->generator;
-        $this->cipher = new \Rtgm\smecc\SM2\Cipher();
+        $this->cipher = new \PhpGm\smecc\SM2\Cipher();
         $c1X = substr($encryptData, 0, 64);
         $c1Y = substr($encryptData, strlen($c1X), 64);
         $c1Length = strlen($c1X) + strlen($c1Y);
@@ -214,7 +216,7 @@ class RtSm2
     {
         $asn1Object = \FG\ASN1\ASNObject::fromBinary($encryptData);
 
-        if (! $asn1Object instanceof \FG\ASN1\Universal\Sequence) {
+        if (!$asn1Object instanceof \FG\ASN1\Universal\Sequence) {
             throw new \Exception('Invalid ASN.1 format');
         }
 
@@ -253,8 +255,9 @@ class RtSm2
         $key = new PrivateKey($adapter, $generator, $secret);
         return $this->_dosign($document, $key, $adapter, $generator, $userId, $algorithm);
     }
+
     /**
-     * SM2 签名pem密码 
+     * SM2 签名pem密码
      *
      */
     public function doSignOutKey($document, $privateKeyFile, $userId = null)
@@ -316,7 +319,7 @@ class RtSm2
         return bin2hex($serializedSig);
     }
 
-    
+
     public function verifySign($document, $sign, $publicKey, $userId = null)
     {
         $adapter = $this->adapter;
@@ -345,7 +348,7 @@ class RtSm2
         $key = $this->_getPubKeyObject($pubKeyX, $pubKeyY);
 
         $signer = new Sm2Signer($adapter);
-        return  $signer->verify($key, $sig, $hash);
+        return $signer->verify($key, $sig, $hash);
     }
 
     public function verifySignOutKey($document, $sign, $publickeyFile, $userId = null)
@@ -385,6 +388,7 @@ class RtSm2
 
         return $signer->verify($key, $sig, $hash);
     }
+
     /**
      *
      */
@@ -392,7 +396,7 @@ class RtSm2
     {
         $hasher = new Sm2WithSm3();
         $hash = $hasher->getSm3Hash($document, $pubKeyX, $pubKeyY, $generator, $userId);
-        return  gmp_init(Hex2ByteBuf::ByteArrayToHexString($hash), 16);
+        return gmp_init(Hex2ByteBuf::ByteArrayToHexString($hash), 16);
     }
 
     protected function _getKeyXY($publicKey)
@@ -429,6 +433,7 @@ class RtSm2
         }
         return implode("", $res);
     }
+
     private function decHex($dec, $len = 64): string
     {
         if (gettype($dec) == 'string') {

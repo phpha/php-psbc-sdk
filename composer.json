@@ -1,6 +1,6 @@
 {
-    "name": "lpilp/guomi",
-    "description": "国密sm2",
+    "name": "phpha/php-psbc-sdk",
+    "description": "PHP邮政储蓄银行SDK",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -11,14 +11,18 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=7.2",
-        "paragonie/ecc": "^2.0"
+        "paragonie/ecc": "^2.0",
+        "ext-gmp": "*",
+        "ext-curl": "*",
+        "ext-json": "*"
     },
     "autoload": {
         "psr-4": {
-            "Rtgm\\": "src"
+            "PhpGm\\": "src"
         },
-        "files": ["src/overwrite.php"]
-        
+        "files": [
+            "src/overwrite.php"
+        ]
     },
     "repositories": {
         "packagist": {
@@ -26,5 +30,4 @@
             "url": "https://mirrors.aliyun.com/composer/"
         }
     }
-    
 }
