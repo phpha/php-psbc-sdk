@@ -15,7 +15,8 @@ class SmSignFormatRS
         // var_dump($arr[0]->getContent());die();
         $r = self::_padding_zero(self::_format_bigint($arr[0]->getContent()));
         $s = self::_padding_zero(self::_format_bigint($arr[1]->getContent()));
-        return base64_encode($r . $s);
+        // return base64_encode($r . $s);
+        return bin2hex($r) . '#' . bin2hex($s);
     }
 
     protected static function _format_bigint($data)
@@ -79,7 +80,6 @@ class SmSignFormatRS
         if (ord($binStr[0]) > 127) {
             $binStr = chr(0) . $binStr;
         }
-        // echo bin2hex($binStr)."\n";
         return $binStr;
     }
 }

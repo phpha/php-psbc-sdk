@@ -3,11 +3,6 @@
     "description": "PHP邮政储蓄银行SDK",
     "type": "library",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "recent"
-        }
-    ],
     "minimum-stability": "stable",
     "require": {
         "php": ">=7.2",
