@@ -1,9 +1,9 @@
 <?php
 //
-namespace PhpGm\smecc\SM2;
+namespace Psbc\smecc\SM2;
 
-use PhpGm\sm\RtSm2;
-use PhpGm\smecc\SM3\SM3Digest;
+use Psbc\sm\RtSm2;
+use Psbc\smecc\SM3\SM3Digest;
 
 class Cipher
 {

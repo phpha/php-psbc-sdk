@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace PhpGm\sdk;
+namespace Psbc\sdk;
 
 use Exception;
-use PhpGm\sm\RtSm2;
-use PhpGm\sm\RtSm4;
-use PhpGm\util\SmSignFormatRS;
+use Psbc\sm\RtSm2;
+use Psbc\sm\RtSm4;
+use Psbc\util\SmSignFormatRS;
 
 class Gateway
 {

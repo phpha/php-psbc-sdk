@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace PhpGm\sdk;
+namespace Psbc\sdk;
 
 class Helper
 {

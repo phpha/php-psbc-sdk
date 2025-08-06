@@ -3,7 +3,7 @@
  *  source: https://github.com/lizhichao/sm
  */
 
-namespace PhpGm\smecc\SM4;
+namespace Psbc\smecc\SM4;
 
 class Sm4
 {

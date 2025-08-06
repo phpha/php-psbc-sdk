@@ -1,6 +1,6 @@
 <?php
 //
-namespace PhpGm\smecc\SM2;
+namespace Psbc\smecc\SM2;
 
 class Hex2ByteBuf
 {

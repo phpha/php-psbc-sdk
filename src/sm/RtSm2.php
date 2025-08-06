@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpGm\sm;
+namespace Psbc\sm;
 
 define("C1C3C2", 1);
 define("C1C2C3", 0);
@@ -13,10 +13,10 @@ use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
 use Mdanter\Ecc\Serializer\PublicKey\DerPublicKeySerializer;
 use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
 use Mdanter\Ecc\Serializer\Signature\DerSignatureSerializer;
-use PhpGm\ecc\RtEccFactory;
-use PhpGm\ecc\Sm2Signer;
-use PhpGm\smecc\SM2\Hex2ByteBuf;
-use PhpGm\smecc\SM2\Sm2WithSm3;
+use Psbc\ecc\RtEccFactory;
+use Psbc\ecc\Sm2Signer;
+use Psbc\smecc\SM2\Hex2ByteBuf;
+use Psbc\smecc\SM2\Sm2WithSm3;
 
 class RtSm2
 {
@@ -116,7 +116,7 @@ class RtSm2
     {
         $adapter = $this->adapter;
         $generator = $this->generator;
-        $this->cipher = new \PhpGm\smecc\SM2\Cipher();
+        $this->cipher = new \Psbc\smecc\SM2\Cipher();
         $arrMsg = Hex2ByteBuf::HexStringToByteArray2(bin2hex($document));
 
         list($pubKeyX, $pubKeyY) = $this->_getKeyXY($publicKey);
@@ -162,7 +162,7 @@ class RtSm2
         }
         $adapter = $this->adapter;
         $generator = $this->generator;
-        $this->cipher = new \PhpGm\smecc\SM2\Cipher();
+        $this->cipher = new \Psbc\smecc\SM2\Cipher();
         $c1X = substr($encryptData, 0, 64);
         $c1Y = substr($encryptData, strlen($c1X), 64);
         $c1Length = strlen($c1X) + strlen($c1Y);

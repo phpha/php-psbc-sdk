@@ -1,6 +1,6 @@
 <?php
 //
-namespace PhpGm\smecc\SM3;
+namespace Psbc\smecc\SM3;
 
 class GeneralDigest
 {

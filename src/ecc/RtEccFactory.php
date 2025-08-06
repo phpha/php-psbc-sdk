@@ -1,13 +1,13 @@
 <?php
 
-namespace PhpGm\ecc;
+namespace Psbc\ecc;
 
 use Mdanter\Ecc\EccFactory;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use RuntimeException;
 
-// use PhpGm\sm\ecc\NistCurve;
+// use Psbc\sm\ecc\NistCurve;
 
 /**
  * 添加sm2的工厂，采用类的继承方式，这里也可以采用如 \Curves\CurveFctory的覆盖的方式

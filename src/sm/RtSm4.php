@@ -1,13 +1,13 @@
 <?php
 
-namespace PhpGm\sm;
+namespace Psbc\sm;
 
 /**
  * Sm4 from  https://github.com/lizhichao/sm
  */
 
 use Exception;
-use PhpGm\smecc\SM4\Sm4;
+use Psbc\smecc\SM4\Sm4;
 
 class RtSm4
 {

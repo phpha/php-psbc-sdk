@@ -14,7 +14,7 @@ use Mdanter\Ecc\Curves\SecgCurve;
 use Mdanter\Ecc\Exception\UnsupportedCurveException;
 use Mdanter\Ecc\Primitives\CurveFpInterface;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
-use PhpGm\ecc\Sm2Curve;
+use Psbc\ecc\Sm2Curve;
 
 class CurveOidMapper
 {

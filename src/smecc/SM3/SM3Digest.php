@@ -1,6 +1,6 @@
 <?php
 //declare(strict_types=1);
-namespace PhpGm\smecc\SM3;
+namespace Psbc\smecc\SM3;
 
 class SM3Digest extends GeneralDigest
 {

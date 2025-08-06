@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpGm\sm;
+namespace Psbc\sm;
 
-use PhpGm\smecc\SM3\SM3Digest;
+use Psbc\smecc\SM3\SM3Digest;
 
 class RtSm3
 {

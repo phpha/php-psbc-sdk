@@ -1,8 +1,8 @@
 <?php
 //
-namespace PhpGm\smecc\SM2;
+namespace Psbc\smecc\SM2;
 
-use PhpGm\smecc\SM3\SM3Digest;
+use Psbc\smecc\SM3\SM3Digest;
 
 class Sm2WithSm3
 {

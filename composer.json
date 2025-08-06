@@ -13,7 +13,7 @@
     },
     "autoload": {
         "psr-4": {
-            "PhpGm\\": "src"
+            "Psbc\\": "src"
         },
         "files": [
             "src/overwrite.php"

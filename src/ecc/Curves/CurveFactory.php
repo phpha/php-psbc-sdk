@@ -10,7 +10,7 @@ use Mdanter\Ecc\Exception\UnsupportedCurveException;
 use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\MathAdapterFactory;
 use Mdanter\Ecc\Primitives\GeneratorPoint;
-use PhpGm\ecc\Sm2Curve;
+use Psbc\ecc\Sm2Curve;
 
 class CurveFactory
 {

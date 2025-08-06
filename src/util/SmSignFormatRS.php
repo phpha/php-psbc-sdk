@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpGm\util;
+namespace Psbc\util;
 
 class SmSignFormatRS
 {

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 // namespace Mdanter\Ecc\Crypto\Signature;
-namespace PhpGm\ecc;
+namespace Psbc\ecc;
 
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;

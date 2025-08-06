@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpGm\ecc;
+namespace Psbc\ecc;
 
 use Mdanter\Ecc\Curves\NamedCurveFp;
 use Mdanter\Ecc\Math\GmpMathInterface;

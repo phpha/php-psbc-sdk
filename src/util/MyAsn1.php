@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpGm\util;
+namespace Psbc\util;
 
 use FG\ASN1\ASNObject;
 use FG\ASN1\Identifier;
