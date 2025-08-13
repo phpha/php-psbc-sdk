@@ -63,7 +63,7 @@ class Gateway
         // 请求参数
         $params = [
             'request' => (new RtSm4($secret))->encrypt(json_encode($param), 'sm4-cbc', $this->config['iv'], 'base64'),
-            'encryptKey' => (new RtSm2('hex'))->doEncrypt($secret, $this->config['sopPublicKey'], C1C2C3),
+            'encryptKey' => (new RtSm2())->doEncrypt($secret, $this->config['sopPublicKey'], C1C2C3),
             'accessToken' => $extra['accessToken'] ?? ''
         ];
         // 生成签名
@@ -85,7 +85,7 @@ class Gateway
             return Helper::return(1002);
         }
         // SM2解密
-        $secret = (new RtSm2('hex'))->doDecrypt($data['encryptKey'], $this->config['mchPrivateKey'], true, C1C2C3);
+        $secret = (new RtSm2())->doDecrypt($data['encryptKey'], $this->config['mchPrivateKey'], true, C1C2C3);
         if (empty($secret)) {
             return Helper::return(1003);
         }
@@ -116,7 +116,7 @@ class Gateway
             return Helper::return(1002);
         }
         // SM2解密
-        $secret = (new RtSm2('hex'))->doDecrypt($param['encryptKey'], $this->config['mchPrivateKey'], true, C1C2C3);
+        $secret = (new RtSm2())->doDecrypt($param['encryptKey'], $this->config['mchPrivateKey'], true, C1C2C3);
         if (empty($secret)) {
             return Helper::return(1003);
         }

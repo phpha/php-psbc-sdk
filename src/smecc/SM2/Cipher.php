@@ -77,6 +77,9 @@ class Cipher
         $c3 = array();
         $gmp_p = $this->p2->GetY();
         $p = Hex2ByteBuf::ConvertGmp2ByteArray($gmp_p);
+        if ($p[0] > 127) { // >7F
+            $this->sm3c3->BlockUpdate(array(0), 0, 1);
+        }
         $this->sm3c3->BlockUpdate($p, 0, sizeof($p));
         $this->sm3c3->DoFinal($c3, 0);
         $this->Reset();
