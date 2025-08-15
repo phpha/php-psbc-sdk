@@ -7,7 +7,7 @@ use Psbc\sdk\Gateway;
 try {
     $result = (new Gateway([
         // 请求地址
-        'reqUrl' => 'http://wap.dev.psbc.com/sop-h5/biz/unionpay/%s.htm?partnerTxSriNo=%s',
+        'reqUrl' => 'http://wap.dev.psbc.com/sop-h5/biz/oauth/%s.htm?partnerTxSriNo=%s',
         // 应用ID
         'appId' => '961925472724332544001',
         // 合作方编号
@@ -20,8 +20,9 @@ try {
         'mchPublicKey' => '0493FC9669F3AAC5450284F9E2E54D65AADEF2F8AD77F8DE2F4C167BA2B1244205F2DF671590E841C01AF63AA6F5F2377367D4277CBDB7F1FF5039F55A55EC4BDF',
         // 商户私钥
         'mchPrivateKey' => '1F0E2F085955461A9B87820AFBD513712CAEA89687BE657DE4EC91613BE62D32'
-    ]))->request('b2c.gatewaypay.orderQuery', [
+    ]))->request('oauth.appAuth', [
         // 业务参数
+        'authCode' => ''
     ]);
     print_r($result);
 } catch (Exception $e) {

@@ -60,10 +60,10 @@ class Gateway
         ];
         // SM4秘钥
         $secret = substr(md5($apiNo . Helper::uniqueId()), 8, 16);
-        // 请求参数
+        // 请求参数|SM2加密补04
         $params = [
             'request' => (new RtSm4($secret))->encrypt(json_encode($param), 'sm4-cbc', $this->config['iv'], 'base64'),
-            'encryptKey' => (new RtSm2())->doEncrypt($secret, $this->config['sopPublicKey'], C1C2C3),
+            'encryptKey' => '04' . (new RtSm2())->doEncrypt($secret, $this->config['sopPublicKey'], C1C2C3),
             'accessToken' => $extra['accessToken'] ?? ''
         ];
         // 生成签名
